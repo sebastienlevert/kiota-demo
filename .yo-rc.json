@@ -1,0 +1,12 @@
+{
+  "generator-teams": {
+    "promptValues": {
+      "developer": "Microsoft Graph DevX",
+      "unitTestsEnabled": false,
+      "lintingSupport": true,
+      "useAzureAppInsights": false
+    },
+    "libraryName": "kiotaDemo",
+    "generator-version": "4.0.0-next.2"
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "$schema": "https://raw.githubusercontent.com/OfficeDev/microsoft-teams-app-schema/preview/DevPreview/MicrosoftTeams.schema.json",
+  "manifestVersion": "m365DevPreview",
+  "id": "{{APPLICATION_ID}}",
+  "version": "{{VERSION}}",
+  "packageName": "{{PACKAGE_NAME}}",
+  "developer": {
+    "name": "Microsoft Graph DevX",
+    "websiteUrl": "https://{{PUBLIC_HOSTNAME}}",
+    "privacyUrl": "https://{{PUBLIC_HOSTNAME}}/privacy.html",
+    "termsOfUseUrl": "https://{{PUBLIC_HOSTNAME}}/tou.html"
+  },
+  "name": {
+    "short": "Kiota Demo",
+    "full": "Kiota Demo"
+  },
+  "description": {
+    "short": "Kiota Demo using our generated SDKs",
+    "full": "A full demo of a React app leveraging the Microsoft Graph Toolkit, tailored Graph SDKs and custom build SDKs using Kiota, Hidi and everything in between."
+  },
+  "icons": {
+    "outline": "graph-icon-outline.png",
+    "color": "graph-icon-color.png"
+  },
+  "accentColor": "#0078d4",
+  "configurableTabs": [],
+  "staticTabs": [
+    {
+      "entityId": "ebd84564-6493-4fd8-a0b0-cecb2cc7d4f3",
+      "name": "Dashboard",
+      "contentUrl": "https://{{PUBLIC_HOSTNAME}}/dashboardTab/?name={loginHint}&tenant={tid}&theme={theme}",
+      "scopes": [
+        "personal"
+      ]
+    }
+  ],
+  "bots": [],
+  "connectors": [],
+  "composeExtensions": [],
+  "permissions": [
+    "identity",
+    "messageTeamMembers"
+  ],
+  "validDomains": [
+    "{{PUBLIC_HOSTNAME}}"
+  ],
+  "showLoadingIndicator": true,
+  "isFullScreen": true,
+  "webApplicationInfo": {
+    "id": "{{TAB_APP_ID}}",
+    "resource": "{{TAB_APP_URI}}"
+  }
+}
