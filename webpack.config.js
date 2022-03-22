@@ -12,7 +12,7 @@ const fs = require("fs");
 const argv = require("yargs").argv;
 
 const debug = argv.debug !== undefined;
-const lint = !(argv["no-linting"] || argv.l === true);
+const lint = false;//!(argv["no-linting"] || argv.l === true);
 
 const config = [{
     entry: {
