@@ -1,13 +1,15 @@
 {
     "compilerOptions": {
-        "module": "es6",
-        "target": "es5",
+        "module": "esnext",
+        "target": "esnext",
         "moduleResolution": "node",
         "noImplicitAny": false,
         "strictNullChecks": true,
         "jsx": "react",
         "sourceMap": true,
-        "allowJs": true
+        "allowJs": true,
+        "downlevelIteration": true,
+        "importHelpers": true,
     },
     "exclude": [
         "node_modules"

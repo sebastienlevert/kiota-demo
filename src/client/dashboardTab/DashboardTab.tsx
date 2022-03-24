@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { HashRouter, Switch, Route, Redirect } from 'react-router-dom';
+import { HashRouter, BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import { get, isArray, isNil, flattenDeep } from 'lodash';
 import { useState, useEffect } from 'react';
 import { useTeams } from 'msteams-react-base-component';
@@ -11,6 +11,16 @@ import Dashboard from './pages/Dashboard';
 import { Home } from './pages/Home';
 import AutoSwitchLayout from './components/layout/AutoSwitchLayout';
 import { DynamicThemeProvider } from './global/themes';
+import { Profile } from './pages/Profile';
+import { Users } from './pages/Graph/Users';
+import { TeamsMsal2Provider } from '@microsoft/mgt-teams-msal2-provider';
+import * as MicrosoftTeams from "@microsoft/teams-js";
+import { Providers } from '@microsoft/mgt-react';
+import { Msal2Provider } from '@microsoft/mgt-msal2-provider';
+import { Teams } from './pages/Graph/Teams';
+import { Emails } from './pages/Graph/Emails';
+import { hierarchize } from './global/hierarchical';
+import routes from './routes';
 
 /**
  * Implementation of the Dashboard content page
@@ -23,8 +33,23 @@ export const DashboardTab = () => {
   const [themeName, setThemeName] = useState<string>();
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>();
 
+  const scopes = [
+    'User.Read', 
+    'User.Read.All',
+    'Mail.Read',
+    'https://orgc2c7c244.crm.dynamics.com/user_impersonation'
+  ]
+  TeamsMsal2Provider.microsoftTeamsLib = MicrosoftTeams;
+  
+
   useEffect(() => {
     if (inTeams === true) {
+      Providers.globalProvider = new TeamsMsal2Provider({
+        clientId: process.env.CLIENT_ID!,
+        scopes: scopes,
+        authPopupUrl: '/auth.html'
+      });
+
       authentication
         .getAuthToken({
           resources: [process.env.TAB_APP_URI as string],
@@ -46,6 +71,11 @@ export const DashboardTab = () => {
         });
     } else {
       setEntityId('Not in Microsoft Teams');
+      
+      Providers.globalProvider = new Msal2Provider({
+        clientId: process.env.CLIENT_ID!,
+        scopes: scopes
+      });
     }
   }, [inTeams]);
 
@@ -57,6 +87,46 @@ export const DashboardTab = () => {
 
   initializeIcons();
 
+  function renderRoute(route) {
+    const isGroup = isArray(route.children);
+    const PageComponent = route.component;
+    const routeComponent = (
+      <Route
+        key={route.uniqueKey}
+        path={route.path}
+        component={route.component}
+        exact={route.exact}
+        //strict={route.strict}
+        //isPublic={route.isPublic}
+      >
+      </Route>
+    );
+  
+    const childComponents = isGroup ? route.children.map(renderRoute) : [];
+    return [routeComponent, ...childComponents];
+  }
+
+  const keyName = "key";
+  const pathName = "path";
+  const uniqueKeyName = "uniqueKey";
+
+  function generateRoutePath(node, parent) {
+    const parentUniqueKey = get(parent, uniqueKeyName);
+    const uniqueKey = parentUniqueKey
+      ? parentUniqueKey + "." + node[keyName]
+      : node[keyName];
+
+    const parentPath = get(parent, pathName, "");
+    const routePath = get(node, pathName, `${parentPath}/${node[keyName]}`);
+    node[uniqueKeyName] = uniqueKey;
+    node[pathName] = routePath;
+  }
+
+  const routeList = hierarchize(routes, null, generateRoutePath);
+
+  const routeComponents = renderRoute(routeList);
+  const flatRouteComponents = flattenDeep(routeComponents);
+
   /**
    * The render() method to create the UI of the tab
    */
@@ -66,11 +136,16 @@ export const DashboardTab = () => {
         <AutoSwitchLayout>
           <React.Suspense fallback={<ProgressIndicator label="Page loading..." />}>
             <Switch>
-              <Route exact path="/">
+              {flatRouteComponents}
+              {/*<Route exact path="/">
                 <Redirect to="/home" />
               </Route>
               <Route exact path="/home" component={Home} />
-              <PrivateRoute path="/configurations" component={Dashboard} />
+              <Route exact path="/profile" component={Profile} />
+              <Route exact path="/users" component={Users} />
+              <Route exact path="/teams" component={Teams} />
+              <Route exact path="/emails" component={Emails} />
+  <PrivateRoute path="/configurations" component={Dashboard} />*/}
             </Switch>
           </React.Suspense>
         </AutoSwitchLayout>

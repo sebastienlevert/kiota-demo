@@ -3,6 +3,7 @@ import { Route, RouteProps, Redirect } from 'react-router-dom';
 
 export interface IPrivateRouteProps extends RouteProps {
   path: string;
+  exact: boolean;
   component?: any;
   isAuthenticated?: boolean;
 }

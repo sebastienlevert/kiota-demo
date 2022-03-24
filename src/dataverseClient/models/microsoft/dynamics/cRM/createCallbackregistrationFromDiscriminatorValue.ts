@@ -1,0 +1,7 @@
+import {Callbackregistration} from './index';
+import {ParseNode} from '@microsoft/kiota-abstractions';
+
+export function createCallbackregistrationFromDiscriminatorValue(parseNode: ParseNode | undefined) : Callbackregistration {
+    if(!parseNode) throw new Error("parseNode cannot be undefined");
+    return new Callbackregistration();
+}

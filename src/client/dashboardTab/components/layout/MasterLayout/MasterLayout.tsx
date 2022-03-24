@@ -19,11 +19,11 @@ const getClassNames = classNamesFunction();
 function MasterLayoutComponent({ children, theme, styles }) {
   const classNames: any = getClassNames(styles, { theme });
   return (
-    <Stack horizontal className={classNames.root}>
+    <Stack horizontal className={classNames.canvas}>
       <Stack.Item grow={false} className={classNames.sidebar}>
         <Sidebar />
       </Stack.Item>
-      <Stack.Item grow={true}>
+      <Stack.Item grow={true} className={classNames.content}>
         <TopMenu styles={styles} theme={theme}  />
         <Stack className={classNames.contentWrapper}>{children}</Stack>
       </Stack.Item>

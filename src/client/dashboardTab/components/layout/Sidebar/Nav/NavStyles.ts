@@ -39,6 +39,8 @@ export function getStyles(
     root: {
       width: isCollapsed ? navCollapsedWidth : navWidth,
       height: '100vh',
+      position: 'sticky' as const,
+      top: 0,
       backgroundColor: navBackgroundColor,
       color: navTextColor,
       borderRightStyle: 'solid',

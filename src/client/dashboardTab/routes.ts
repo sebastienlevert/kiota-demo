@@ -1,70 +1,74 @@
-import { Home } from './pages/Home';
-import { Opportunities } from './pages/Opportunities';
-import { Profile } from './pages/Profile';
+import * as React from "react";
 
 const routes = {
   key: 'home',
   name: 'Home',
   icon: 'Home',
   path: '/',
-  component: Home,
+  exact: true,
+  component: React.lazy(async () => ({ default: (await import('./pages/Home')).Home })),
   children: [
     {
       key: 'profile',
       name: 'Profile',
       path: '/profile',
-      component: Profile
+      icon: 'ContactCard',
+      exact: true,
+      component: React.lazy(async () => ({ default: (await import('./pages/Profile')).Profile }))
     },
     {
-      key: 'order',
-      name: 'Order',
-      icon: 'visualizeApp',
+      key: 'microsoft-graph',
+      name: 'Microsoft Graph',
+      icon: 'Embed',
       children: [
         {
-          key: 'purchase-order',
-          name: 'Purchase Order',
-          component: Opportunities
+          key: 'users',
+          name: 'Users',
+          path: '/users',
+          icon: 'People',
+          exact: true,
+          component: React.lazy(async () => ({ default: (await import('./pages/Graph/Users')).Users }))
         },
         {
-          key: 'sales-order',
-          name: 'Sales Order'
-        }
+          key: 'teams',
+          name: 'Teams',
+          path: '/teams',
+          icon: 'TeamsLogo',
+          exact: true,
+          component: React.lazy(async () => ({ default: (await import('./pages/Graph/Teams')).Teams }))
+        },
+        {
+          key: 'emails',
+          name: 'Emails',
+          path: '/emails',
+          icon: 'Mail',
+          exact: true,
+          component: React.lazy(async () => ({ default: (await import('./pages/Graph/Emails')).Emails }))
+
+        },
       ]
     },
     {
-      key: 'mangement',
-      name: 'System Management',
-      icon: 'managementApp',
+      key: 'dataverse',
+      name: 'Dataverse',
+      icon: 'Dynamics365Logo',
+      exact: true,
       children: [
         {
-          key: 'organization',
-          name: 'Organization',
-          icon: 'Org'
+          key: 'opportunities',
+          name: 'Opportunities',
+          path: '/opportunities',
+          icon: 'FolderOpen',
+          exact: true,
+          component: React.lazy(async () => ({ default: (await import('./pages/Opportunities')).Opportunities }))
         },
         {
-          key: 'user',
-          name: 'User',
-          icon: 'People'
-        },
-        {
-          key: 'authority',
-          name: 'Authority',
-          icon: 'SecurityGroup'
-        },
-        {
-          key: 'settings',
-          name: 'Settings',
-          icon: 'Settings',
-          children: [
-            {
-              key: 'list',
-              name: 'List'
-            },
-            {
-              key: 'unit',
-              name: 'Unit'
-            }
-          ]
+          key: 'appointments',
+          name: 'Appointments',
+          path: '/appointments',
+          icon: 'FolderOpen',
+          exact: true,
+          component: React.lazy(async () => ({ default: (await import('./pages/Appointments')).Appointments }))
         }
       ]
     }

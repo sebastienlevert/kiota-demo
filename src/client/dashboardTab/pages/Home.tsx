@@ -5,7 +5,7 @@ export const Home: React.FunctionComponent = () => {
   return (
     <PageHeader
       title={'Home'}
-      description={'Suspendisse facilisis ultricies sapien, non tempus elit faucibus in.'}
+      description={'Welcome to the Kiota Demo sample!'}
     ></PageHeader>
   );
 };
