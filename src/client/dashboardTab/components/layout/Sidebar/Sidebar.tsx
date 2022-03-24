@@ -1,12 +1,13 @@
-import * as React from "react";
-import { isArray } from "lodash";
-import { useHistory, useLocation, matchPath } from "react-router-dom";
-import { findNode, getParents } from "../../../global/hierarchical";
-import routes from "../../../routes";
-import { NavToggler } from "./Nav/NavToggler";
+import * as React from 'react';
+import { isArray } from 'lodash';
+import { useHistory, useLocation, matchPath } from 'react-router-dom';
+import { findNode, getParents } from '../../../global/hierarchical';
+import routes from '../../../routes';
+import { NavToggler } from './Nav/NavToggler';
+import { useGraphToolkit } from '../../../../hooks/useGraphToolkit';
 
 function findRoute(pathname) {
-  const current = findNode(routes, (route) => {
+  const current = findNode(routes, route => {
     const match = matchPath(pathname, route);
     return match?.isExact;
   });
@@ -25,6 +26,7 @@ function hasChildren(route) {
 export function Sidebar() {
   const history = useHistory();
   const { pathname } = useLocation();
+  const { isSignedIn } = useGraphToolkit();
 
   const { current, paths } = findRoute(pathname);
 
@@ -35,59 +37,47 @@ export function Sidebar() {
       alternateText: route.name,
       title: route.name,
       url: route.path,
-      onClick: (e) => {
+      onClick: e => {
         e.preventDefault();
         history.push(route.path);
       },
-      isExpanded:
-        deeply &&
-        hasChildren(route) &&
-        paths.some((that) => that.uniqueKey === route.uniqueKey),
+      isHidden: !isSignedIn && !route.isPublic,
+      isExpanded: deeply && hasChildren(route) && paths.some(that => that.uniqueKey === route.uniqueKey),
       links:
-        deeply &&
-        hasChildren(route) &&
-        route.children
-          .filter(isVisible)
-          .map((child) => mapRouteToNavLink(child, deeply)),
-      icon: route.icon
-        ? route.icon
-        : hasChildren(route)
-        ? "DocumentSet"
-        : "TextDocument",
+        deeply && hasChildren(route) && route.children.filter(isVisible).map(child => mapRouteToNavLink(child, deeply)),
+      icon: route.icon ? route.icon : hasChildren(route) ? 'DocumentSet' : 'TextDocument'
     };
   }
 
   const homeLink = mapRouteToNavLink(routes, false);
   const topPageLinks = routes.children
-    .filter((route) => isVisible(route) && !isArray(route.children))
-    .map((route) => mapRouteToNavLink(route, false));
+    .filter(route => isVisible(route) && !isArray(route.children))
+    .map(route => mapRouteToNavLink(route, false));
 
   const groupLinks = routes.children.filter(hasChildren).map((route: any) => ({
     name: route.name,
-    groupType: "MenuGroup",
-    links: route.children
-      .filter(isVisible)
-      .map((child) => mapRouteToNavLink(child, true)),
+    groupType: 'MenuGroup',
+    links: route.children.filter(isVisible).map(child => mapRouteToNavLink(child, true))
   }));
 
   const navLinkGroups = [
     {
       links: [
         {
-          key: "Collapse",
-          name: "Collapsed",
-          alternateText: "Expanded",
-          icon: "GlobalNavButton",
-          title: "Collapse",
-        },
+          key: 'Collapse',
+          name: 'Collapsed',
+          alternateText: 'Expanded',
+          icon: 'GlobalNavButton',
+          title: 'Collapse'
+        }
       ],
-      groupType: "ToggleGroup",
+      groupType: 'ToggleGroup'
     },
     {
       links: [homeLink, ...topPageLinks],
-      groupType: "MenuGroup",
+      groupType: 'MenuGroup'
     },
-    ...groupLinks,
+    ...groupLinks
   ];
 
   return <NavToggler groups={navLinkGroups} selectedKey={current?.uniqueKey} />;

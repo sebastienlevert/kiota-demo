@@ -2,21 +2,23 @@ import { DetailsListLayoutMode, IColumn, SelectionMode, ShimmeredDetailsList } f
 import { Person, PersonCardInteraction, ViewType } from '@microsoft/mgt-react';
 import * as React from 'react';
 import { useEffect } from 'react';
-import { DataverseClient } from '../../../dataverseClient/dataverseClient';
-import { Appointment, Opportunity } from '../../../dataverseClient/models/microsoft/dynamics/cRM';
-import { useDataverse } from '../../hooks/useDataverse';
-import { PageHeader } from '../components/PageHeader/PageHeader';
-import { buildColumns } from '../helpers/buildColumns';
+import { DataverseClient } from '../../../../dataverseClient/dataverseClient';
+import { Appointment, Opportunity } from '../../../../dataverseClient/models/microsoft/dynamics/cRM';
+import { useDataverse } from '../../../hooks/useDataverse';
+import { PageHeader } from '../../components/PageHeader/PageHeader';
+import { buildColumns } from '../../../mgt/buildColumns';
+import { useGraphToolkit } from '../../../hooks/useGraphToolkit';
 
-export const Appointments: React.FunctionComponent = () => {  
-  const [{ isSignedIn, client }] = useDataverse();
+export const Appointments: React.FunctionComponent = () => {
+  const { isSignedIn } = useGraphToolkit();
+  const dataverseClient = useDataverse();
   const [appointments, setAppointments] = React.useState<Appointment[] | undefined>(undefined);
-  
+
   useEffect(() => {
-    if(isSignedIn) {
-      fetchData(client);
-    }    
-  }, [isSignedIn]);
+    if (dataverseClient && isSignedIn) {
+      fetchData(dataverseClient);
+    }
+  }, [dataverseClient, isSignedIn]);
 
   const columns: IColumn[] = [
     {
@@ -24,41 +26,46 @@ export const Appointments: React.FunctionComponent = () => {
       fieldName: 'activityid',
       name: 'Identifier',
       minWidth: 300,
-      maxWidth: 300,
+      maxWidth: 300
     },
     {
       key: 'subject',
       fieldName: 'subject',
       name: 'Subject',
       minWidth: 300,
-      maxWidth: 300,
+      maxWidth: 300
     },
     {
       key: 'owninguser',
       fieldName: 'owninguser',
       name: 'User',
       minWidth: 300,
-      maxWidth: 300,
+      maxWidth: 300
     }
   ];
 
-  
   const fetchData = async (client: DataverseClient) => {
     const data = await client.appointments.get({
       top: 10,
-      select: ["subject", "activityid"],
-      expand: ["owninguser"]
+      select: ['subject', 'activityid'],
+      expand: ['owninguser']
     });
     setAppointments(data?.value);
-  }
+  };
 
   function _renderItemColumn(item: any, index: number, column: IColumn) {
     const fieldContent = item[column.fieldName as keyof any] as any;
-  
+
     switch (column.key) {
       case 'owninguser':
-        return <Person userId={fieldContent.azureactivedirectoryobjectid} view={ViewType.twolines} personCardInteraction={PersonCardInteraction.hover}></Person>;
-    
+        return (
+          <Person
+            userId={fieldContent.azureactivedirectoryobjectid}
+            view={ViewType.twolines}
+            personCardInteraction={PersonCardInteraction.hover}
+          ></Person>
+        );
+
       default:
         return <span>{fieldContent}</span>;
     }
@@ -68,7 +75,7 @@ export const Appointments: React.FunctionComponent = () => {
     <>
       <PageHeader title={'Appointments'} description={'Appointments.'}></PageHeader>
 
-          {/*<List resource='/users'></List>
+      {/*<List resource='/users'></List>
           <ShimmeredDetailsList
             items={users || []}
             columns={buildColumns(usersJson!)}
@@ -83,8 +90,7 @@ export const Appointments: React.FunctionComponent = () => {
             {opportunities?.map((opp) => (
               <div key={opp.opportunityid}>{opp.name}</div>
             ))}
-          */
-          }
+          */}
       <div>
         {isSignedIn && (
           <>
@@ -97,7 +103,7 @@ export const Appointments: React.FunctionComponent = () => {
               enableShimmer={!appointments}
               ariaLabelForSelectionColumn="Toggle selection"
               ariaLabelForSelectAllCheckbox="Toggle selection for all items"
-              />
+            />
           </>
         )}
       </div>

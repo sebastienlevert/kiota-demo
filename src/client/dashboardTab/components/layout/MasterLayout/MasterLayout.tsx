@@ -24,7 +24,7 @@ function MasterLayoutComponent({ children, theme, styles }) {
         <Sidebar />
       </Stack.Item>
       <Stack.Item grow={true} className={classNames.content}>
-        <TopMenu styles={styles} theme={theme}  />
+        <TopMenu styles={styles} theme={theme} />
         <Stack className={classNames.contentWrapper}>{children}</Stack>
       </Stack.Item>
     </Stack>

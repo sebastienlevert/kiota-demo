@@ -1,13 +1,9 @@
-import * as React from "react";
-import {
-  AnimationClassNames,
-  classNamesFunction,
-  styled,
-} from "@fluentui/react";
+import * as React from 'react';
+import { AnimationClassNames, classNamesFunction, styled } from '@fluentui/react';
 
-import { getStyles } from "./NavStyles";
-import { NavBase } from "./NavBase";
-import { NavLink } from "./NavLink";
+import { getStyles } from './NavStyles';
+import { NavBase } from './NavBase';
+import { NavLink } from './NavLink';
 
 const getClassNames = classNamesFunction();
 
@@ -16,7 +12,7 @@ class NavComponent extends NavBase {
     super(props);
     this.state = {
       isLinkExpandStateChanged: false,
-      selectedKey: props.initialSelectedKey || props.selectedKey,
+      selectedKey: props.initialSelectedKey || props.selectedKey
     };
   }
 
@@ -38,7 +34,7 @@ class NavComponent extends NavBase {
 
   _onLinkClicked(link, ev) {
     let nextState: any = {
-      selectedKey: link.key,
+      selectedKey: link.key
     };
 
     const hasChildren = link.links?.length;
@@ -72,39 +68,35 @@ class NavComponent extends NavBase {
     let ariaProps = {};
     if (link.links && link.links.length > 0 && nestingLevel === 0) {
       // for the first level link, show chevron icon if there is a children
-      rightIconName = link.isExpanded ? "ChevronUp" : "ChevronDown";
+      rightIconName = link.isExpanded ? 'ChevronUp' : 'ChevronDown';
       ariaProps = { ariaExpanded: !!link.isExpanded };
-    } else if (link.url && link.target === "_blank") {
+    } else if (link.url && link.target === '_blank') {
       // for external links, show an icon
-      rightIconName = "OpenInNewWindow";
+      rightIconName = 'OpenInNewWindow';
     }
 
     // show nav icon for the first level only
     const leftIconName = nestingLevel === 0 ? link.icon : undefined;
-    const isLinkSelected = this.isLinkSelected(
-      link,
-      false /* includeChildren */
-    );
+    const isLinkSelected = this.isLinkSelected(link, false /* includeChildren */);
     const isChildLinkSelected = this.isChildLinkSelected(link);
     const hasChildren = link.links?.length;
-    const isSelected =
-      (isLinkSelected && !hasChildren) ||
-      (isChildLinkSelected && !link.isExpanded);
+    const isSelected = (isLinkSelected && !hasChildren) || (isChildLinkSelected && !link.isExpanded);
     const classNames: any = getClassNames(styles, {
       isSelected,
       nestingLevel,
       isChildLinkSelected,
-      theme,
+      theme
     });
     const linkText = this.getLinkText(link, showMore);
     const onClickHandler =
-      link.isShowMoreLink && onShowMoreLinkClicked
-        ? onShowMoreLinkClicked
-        : this._onLinkClicked.bind(this, link);
+      link.isShowMoreLink && onShowMoreLinkClicked ? onShowMoreLinkClicked : this._onLinkClicked.bind(this, link);
 
     return (
       <NavLink
-        id={undefined} ariaExpanded={undefined} title={undefined} content={linkText}
+        id={undefined}
+        ariaExpanded={undefined}
+        title={undefined}
+        content={linkText}
         href={link.url}
         target={link.target}
         onClick={onClickHandler}
@@ -118,7 +110,8 @@ class NavComponent extends NavBase {
         textClassName={classNames.navItemNameColumn}
         iconClassName={classNames.navItemIconColumn}
         barClassName={classNames.navItemBarMarker}
-        focusedStyle={classNames.focusedStyle}      />
+        focusedStyle={classNames.focusedStyle}
+      />
     );
   }
 
@@ -137,9 +130,7 @@ class NavComponent extends NavBase {
           // 1. only for the first level and
           // 2. if the link is expanded
           nestingLevel === 0 && link.isExpanded ? (
-            <div className={AnimationClassNames.slideDownIn20}>
-              {this._renderLinks(link.links, ++nestingLevel)}
-            </div>
+            <div className={AnimationClassNames.slideDownIn20}>{this._renderLinks(link.links, ++nestingLevel)}</div>
           ) : null
         }
       </li>
@@ -160,11 +151,7 @@ class NavComponent extends NavBase {
 
             // "Show more" overrides isHidden property
             return null;
-          } else if (
-            link.isShowMoreLink &&
-            !this._hasAtleastOneHiddenLink &&
-            !showMore
-          ) {
+          } else if (link.isShowMoreLink && !this._hasAtleastOneHiddenLink && !showMore) {
             // there is no hidden link, hide "Show more" link
             return null;
           } else {
@@ -189,10 +176,7 @@ class NavComponent extends NavBase {
     // first group header is hidden by default, display group header for other groups only if there are visible links
     let isGroupHeaderVisible = false;
     if (groupIndex > 0) {
-      isGroupHeaderVisible = this.hasAtleastOneVisibleLink(
-        group.links,
-        this.props.showMore
-      );
+      isGroupHeaderVisible = this.hasAtleastOneVisibleLink(group.links, this.props.showMore);
     }
 
     return (
@@ -200,11 +184,7 @@ class NavComponent extends NavBase {
         {isGroupHeaderVisible ? (
           <div className={classNames.navGroupSeparatorRoot}>
             <div className={classNames.navGroupSeparatorHrLine}>
-              {group.name ? (
-                <span className={classNames.navGroupSeparatorHeaderGroupName}>
-                  {group.name}
-                </span>
-              ) : null}
+              {group.name ? <span className={classNames.navGroupSeparatorHeaderGroupName}>{group.name}</span> : null}
             </div>
           </div>
         ) : null}

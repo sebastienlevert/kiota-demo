@@ -1,18 +1,13 @@
 import * as React from 'react';
 
-import {
-  DetailsListLayoutMode,
-  SelectionMode,
-  ShimmeredDetailsList,
-  IListProps
-} from '@fluentui/react';
-import { buildColumns } from '../dashboardTab/helpers/buildColumns';
-import { useMicrosoftGraph } from '../hooks/useMicrosoftGraph';
+import { DetailsListLayoutMode, SelectionMode, ShimmeredDetailsList, IListProps } from '@fluentui/react';
+import { buildColumns } from './buildColumns';
+import { useGraphToolkit } from '../hooks/useGraphToolkit';
 import { Get, GetProps, MgtTemplateProps } from '@microsoft/mgt-react';
 
 const shimmeredDetailsListProps: IListProps = {
   renderedWindowsAhead: 0,
-  renderedWindowsBehind: 0,
+  renderedWindowsBehind: 0
 };
 
 export interface ListProps extends GetProps {
@@ -20,32 +15,31 @@ export interface ListProps extends GetProps {
 }
 
 export const List: React.FunctionComponent<GetProps> = (props: GetProps) => {
-  const [{ isSignedIn }] = useMicrosoftGraph();
+  const { isSignedIn } = useGraphToolkit();
 
   return (
     <>
-        {isSignedIn && (
-            <Get {...props}>
-                <ListComponent template="default"></ListComponent>
-            </Get>
-            
-        )}
+      {isSignedIn && (
+        <Get {...props}>
+          <ListComponent template="default"></ListComponent>
+        </Get>
+      )}
     </>
   );
 };
 
 function ListComponent(props: MgtTemplateProps) {
-    const { value } = props.dataContext;
-    return (
-        <ShimmeredDetailsList
-            items={value || []}
-            columns={buildColumns(value!)}
-            layoutMode={DetailsListLayoutMode.justified}
-            selectionMode={SelectionMode.none}
-            enableShimmer={!value}
-            ariaLabelForSelectionColumn="Toggle selection"
-            ariaLabelForSelectAllCheckbox="Toggle selection for all items"
-            listProps={shimmeredDetailsListProps}
-            />
-    )
-  }
+  const { value } = props.dataContext;
+  return (
+    <ShimmeredDetailsList
+      items={value || []}
+      columns={buildColumns(value!)}
+      layoutMode={DetailsListLayoutMode.justified}
+      selectionMode={SelectionMode.none}
+      enableShimmer={!value}
+      ariaLabelForSelectionColumn="Toggle selection"
+      ariaLabelForSelectAllCheckbox="Toggle selection for all items"
+      listProps={shimmeredDetailsListProps}
+    />
+  );
+}

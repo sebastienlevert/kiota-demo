@@ -1,15 +1,10 @@
-import * as React from "react";
-import {
-  styled,
-  classNamesFunction,
-  FocusZone,
-  FocusZoneDirection,
-} from "@fluentui/react";
+import * as React from 'react';
+import { styled, classNamesFunction, FocusZone, FocusZoneDirection } from '@fluentui/react';
 
-import { Nav } from "./Nav";
-import { SlimNav } from "./SlimNav";
-import { getStyles } from "./NavStyles";
-import { NavLink } from "./NavLink";
+import { Nav } from './Nav';
+import { SlimNav } from './SlimNav';
+import { getStyles } from './NavStyles';
+import { NavLink } from './NavLink';
 
 const getClassNames = classNamesFunction();
 
@@ -17,10 +12,8 @@ class NavTogglerComponent extends React.Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
-      isNavCollapsed:
-        localStorage.getItem("NavToggler.isNavCollapsed") === "true" ||
-        window.innerWidth < 720,
-      showMore: localStorage.getItem("NavToggler.showMore") === "true",
+      isNavCollapsed: localStorage.getItem('NavToggler.isNavCollapsed') === 'true' || window.innerWidth < 720,
+      showMore: localStorage.getItem('NavToggler.showMore') === 'true'
     };
     this._onShowMoreLinkClicked = this._onShowMoreLinkClicked.bind(this);
   }
@@ -35,15 +28,11 @@ class NavTogglerComponent extends React.Component<any, any> {
 
     const classNames: any = getClassNames(styles, {
       isCollapsed: isNavCollapsed,
-      theme: theme,
+      theme: theme
     });
 
-    const toggleNavGroups = groups.filter(
-      (navGroup) => navGroup?.groupType === "ToggleGroup"
-    );
-    const nonToggleNavGroups = groups.filter(
-      (navGroup) => navGroup?.groupType !== "ToggleGroup"
-    );
+    const toggleNavGroups = groups.filter(navGroup => navGroup?.groupType === 'ToggleGroup');
+    const nonToggleNavGroups = groups.filter(navGroup => navGroup?.groupType !== 'ToggleGroup');
 
     return (
       <div className={classNames.root}>
@@ -74,11 +63,8 @@ class NavTogglerComponent extends React.Component<any, any> {
   _onNavCollapseClicked(ev) {
     ev.preventDefault();
     ev.stopPropagation();
-    this.setState((prevState) => {
-      localStorage.setItem(
-        "NavToggler.isNavCollapsed",
-        prevState.isNavCollapsed ? "false" : "true"
-      );
+    this.setState(prevState => {
+      localStorage.setItem('NavToggler.isNavCollapsed', prevState.isNavCollapsed ? 'false' : 'true');
       return { isNavCollapsed: !prevState.isNavCollapsed };
     });
   }
@@ -119,11 +105,8 @@ class NavTogglerComponent extends React.Component<any, any> {
   _onShowMoreLinkClicked(ev) {
     ev.preventDefault();
     ev.stopPropagation();
-    this.setState((prevState) => {
-      localStorage.setItem(
-        "NavToggler.showMore",
-        prevState.showMore ? "false" : "true"
-      );
+    this.setState(prevState => {
+      localStorage.setItem('NavToggler.showMore', prevState.showMore ? 'false' : 'true');
       return { showMore: !prevState.showMore };
     });
   }

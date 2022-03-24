@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from 'react';
 
 const routes = {
   key: 'home',
@@ -6,6 +6,7 @@ const routes = {
   icon: 'Home',
   path: '/',
   exact: true,
+  isPublic: true,
   component: React.lazy(async () => ({ default: (await import('./pages/Home')).Home })),
   children: [
     {
@@ -44,8 +45,15 @@ const routes = {
           icon: 'Mail',
           exact: true,
           component: React.lazy(async () => ({ default: (await import('./pages/Graph/Emails')).Emails }))
-
         },
+        {
+          key: 'groups',
+          name: 'Groups2',
+          path: '/groups',
+          icon: 'Mail',
+          exact: true,
+          component: React.lazy(async () => ({ default: (await import('./pages/Graph/Groups')).Groups }))
+        }
       ]
     },
     {
@@ -60,7 +68,9 @@ const routes = {
           path: '/opportunities',
           icon: 'FolderOpen',
           exact: true,
-          component: React.lazy(async () => ({ default: (await import('./pages/Opportunities')).Opportunities }))
+          component: React.lazy(async () => ({
+            default: (await import('./pages/Dataverse/Opportunities')).Opportunities
+          }))
         },
         {
           key: 'appointments',
@@ -68,7 +78,9 @@ const routes = {
           path: '/appointments',
           icon: 'FolderOpen',
           exact: true,
-          component: React.lazy(async () => ({ default: (await import('./pages/Appointments')).Appointments }))
+          component: React.lazy(async () => ({
+            default: (await import('./pages/Dataverse/Appointments')).Appointments
+          }))
         }
       ]
     }
