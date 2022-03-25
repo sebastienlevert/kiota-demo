@@ -7,6 +7,7 @@ import { useDataverse } from '../../../hooks/useDataverse';
 import { PageHeader } from '../../components/PageHeader/PageHeader';
 import { buildColumns } from '../../../mgt/buildColumns';
 import { useGraphToolkit } from '../../../hooks/useGraphToolkit';
+import { Person, PersonCardInteraction, ViewType } from '@microsoft/mgt-react';
 
 export const Opportunities: React.FunctionComponent = () => {
   const { isSignedIn } = useGraphToolkit();
@@ -22,10 +23,10 @@ export const Opportunities: React.FunctionComponent = () => {
   const fetchOpportunities = async (client: DataverseClient) => {
     const data = await client.opportunities.get({
       top: 10,
-      select: ['name, opportunityid']
+      select: ['name, opportunityid'],
+      expand: ['owninguser']
     });
     setOpportunities(data?.value);
-    console.log(data?.value![0]?.name);
   };
 
   const columns: IColumn[] = [
@@ -40,31 +41,45 @@ export const Opportunities: React.FunctionComponent = () => {
       key: 'name',
       fieldName: 'name',
       name: 'Name',
-      minWidth: 200,
-      maxWidth: 200
+      minWidth: 200
+    },
+    {
+      key: 'owninguser',
+      fieldName: 'owninguser',
+      name: 'User',
+      minWidth: 300,
+      maxWidth: 300
     }
   ];
+
+  function _onRenderItemColumn(item: any, index: number, column: IColumn) {
+    const fieldContent = item[column.fieldName as keyof any] as any;
+
+    switch (column.key) {
+      case 'owninguser':
+        return (
+          <Person
+            userId={fieldContent.azureactivedirectoryobjectid}
+            view={ViewType.oneline}
+            personCardInteraction={PersonCardInteraction.hover}
+          ></Person>
+        );
+
+      default:
+        return <span>{fieldContent}</span>;
+    }
+  }
+
+  function _onItemInvoked(item: any) {
+    window.open(
+      `${process.env.DATAVERSE_URL}/main.aspx?app=d365default&forceUCI=1&pagetype=entityrecord&etn=opportunity&id=${item.opportunityid}`,
+      '_blank'
+    );
+  }
 
   return (
     <>
       <PageHeader title={'Opportunities'} description={'Opportunities.'}></PageHeader>
-
-      {/*<List resource='/users'></List>
-          <ShimmeredDetailsList
-            items={users || []}
-            columns={buildColumns(usersJson!)}
-            layoutMode={DetailsListLayoutMode.justified}
-            selectionMode={SelectionMode.none}
-            enableShimmer={!users}
-            ariaLabelForSelectionColumn="Toggle selection"
-            ariaLabelForSelectAllCheckbox="Toggle selection for all items"
-            />
-          
-            
-            {opportunities?.map((opp) => (
-              <div key={opp.opportunityid}>{opp.name}</div>
-            ))}
-          */}
       <div>
         {isSignedIn && (
           <>
@@ -74,6 +89,8 @@ export const Opportunities: React.FunctionComponent = () => {
               layoutMode={DetailsListLayoutMode.justified}
               selectionMode={SelectionMode.none}
               enableShimmer={!opportunities}
+              onRenderItemColumn={_onRenderItemColumn}
+              onItemInvoked={_onItemInvoked}
               ariaLabelForSelectionColumn="Toggle selection"
               ariaLabelForSelectAllCheckbox="Toggle selection for all items"
             />

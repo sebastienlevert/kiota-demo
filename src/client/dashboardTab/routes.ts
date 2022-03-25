@@ -10,16 +10,23 @@ const routes = {
   component: React.lazy(async () => ({ default: (await import('./pages/Home')).Home })),
   children: [
     {
-      key: 'profile',
-      name: 'Profile',
-      path: '/profile',
-      icon: 'ContactCard',
-      exact: true,
-      component: React.lazy(async () => ({ default: (await import('./pages/Profile')).Profile }))
+      key: 'microsoft-graph',
+      name: 'Microsoft Graph SDK',
+      icon: 'Embed',
+      children: [
+        {
+          key: 'groups',
+          name: 'Groups',
+          path: '/groups',
+          icon: 'Mail',
+          exact: true,
+          component: React.lazy(async () => ({ default: (await import('./pages/Graph/Groups')).Groups }))
+        }
+      ]
     },
     {
-      key: 'microsoft-graph',
-      name: 'Microsoft Graph',
+      key: 'kiota-graph',
+      name: 'Graph with Kiota',
       icon: 'Embed',
       children: [
         {
@@ -29,30 +36,6 @@ const routes = {
           icon: 'People',
           exact: true,
           component: React.lazy(async () => ({ default: (await import('./pages/Graph/Users')).Users }))
-        },
-        {
-          key: 'teams',
-          name: 'Teams',
-          path: '/teams',
-          icon: 'TeamsLogo',
-          exact: true,
-          component: React.lazy(async () => ({ default: (await import('./pages/Graph/Teams')).Teams }))
-        },
-        {
-          key: 'emails',
-          name: 'Emails',
-          path: '/emails',
-          icon: 'Mail',
-          exact: true,
-          component: React.lazy(async () => ({ default: (await import('./pages/Graph/Emails')).Emails }))
-        },
-        {
-          key: 'groups',
-          name: 'Groups2',
-          path: '/groups',
-          icon: 'Mail',
-          exact: true,
-          component: React.lazy(async () => ({ default: (await import('./pages/Graph/Groups')).Groups }))
         }
       ]
     },
@@ -71,16 +54,29 @@ const routes = {
           component: React.lazy(async () => ({
             default: (await import('./pages/Dataverse/Opportunities')).Opportunities
           }))
+        }
+      ]
+    },
+    {
+      key: 'mgt',
+      name: 'Microsoft Graph Toolkit',
+      icon: 'Embed',
+      children: [
+        {
+          key: 'users',
+          name: 'Users',
+          path: '/mgt-users',
+          icon: 'People',
+          exact: true,
+          component: React.lazy(async () => ({ default: (await import('./pages/Toolkit/Users')).Users }))
         },
         {
-          key: 'appointments',
-          name: 'Appointments',
-          path: '/appointments',
-          icon: 'FolderOpen',
+          key: 'teams',
+          name: 'Teams',
+          path: '/teams',
+          icon: 'TeamsLogo',
           exact: true,
-          component: React.lazy(async () => ({
-            default: (await import('./pages/Dataverse/Appointments')).Appointments
-          }))
+          component: React.lazy(async () => ({ default: (await import('./pages/Toolkit/Teams')).Teams }))
         }
       ]
     }

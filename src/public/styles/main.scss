@@ -1,11 +1,15 @@
 body {
-	margin: 0 !important;
+  margin: 0 !important;
 }
 
 .mgt-dark {
-	background-color: rgb(27, 26, 25) !important;
+  background-color: rgb(27, 26, 25) !important;
 }
 
 mgt-login {
-    --padding: 4px 4px;
+  --padding: 4px 4px;
+}
+
+.ms-DetailsRow {
+  animation-name: none;
 }

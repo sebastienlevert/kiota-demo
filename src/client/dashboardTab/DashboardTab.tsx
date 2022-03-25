@@ -1,28 +1,21 @@
 import * as React from 'react';
-import { HashRouter, BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
-import { get, isArray, isNil, flattenDeep } from 'lodash';
+import { HashRouter, Switch, Route } from 'react-router-dom';
+import { get, isArray, flattenDeep } from 'lodash';
 import { useState, useEffect } from 'react';
 import { useTeams } from 'msteams-react-base-component';
 import { app, authentication } from '@microsoft/teams-js';
 import jwtDecode from 'jwt-decode';
 import { PrivateRoute } from './components/PrivateRoute';
 import { initializeIcons, ProgressIndicator, ThemeProvider } from '@fluentui/react';
-import Dashboard from './pages/Dashboard';
-import { Home } from './pages/Home';
 import AutoSwitchLayout from './components/layout/AutoSwitchLayout';
 import { DynamicThemeProvider } from './global/themes';
-import { Profile } from './pages/Profile';
-import { Users } from './pages/Graph/Users';
 import { TeamsMsal2Provider } from '@microsoft/mgt-teams-msal2-provider';
 import * as MicrosoftTeams from '@microsoft/teams-js';
 import { LoginType, Providers } from '@microsoft/mgt-react';
 import { Msal2Provider } from '@microsoft/mgt-msal2-provider';
-import { Teams } from './pages/Graph/Teams';
-import { Emails } from './pages/Graph/Emails';
 import { hierarchize } from './global/hierarchical';
 import routes from './routes';
 import { useGraphToolkit } from '../hooks/useGraphToolkit';
-import { BrowserCacheLocation } from '@azure/msal-browser';
 
 /**
  * Implementation of the Dashboard content page

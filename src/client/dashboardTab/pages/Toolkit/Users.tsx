@@ -1,22 +1,17 @@
 import * as React from 'react';
 import { PageHeader } from '../../components/PageHeader/PageHeader';
 import { useGraphToolkit } from '../../../hooks/useGraphToolkit';
+import { List } from '../../../mgt/MgtList';
 import { useEffect } from 'react';
 import { GraphClient } from '../../../../graphClient/graphClient';
+import { DetailsListLayoutMode, IColumn, SelectionMode, ShimmeredDetailsList } from '@fluentui/react';
+import { buildColumns } from '../../../mgt/buildColumns';
 import { User } from '../../../../graphClient/models/microsoft/graph/user';
 import { useGraph } from '../../../hooks/useGraph';
-import { DetailsList, IColumn } from '@fluentui/react';
+import { Person, PersonCardInteraction, ViewType } from '@microsoft/mgt-react';
 
 export const Users: React.FunctionComponent = () => {
   const { isSignedIn } = useGraphToolkit();
-  const { client } = useGraph();
-  const [users, setUsers] = React.useState<User[] | undefined>(undefined);
-
-  useEffect(() => {
-    if (client) {
-      fetchUsers(client);
-    }
-  }, [isSignedIn, client]);
 
   const columns: IColumn[] = [
     {
@@ -48,14 +43,18 @@ export const Users: React.FunctionComponent = () => {
     }
   ];
 
-  const fetchUsers = async (client: GraphClient) => {
-    const users = await client.users.get({
-      top: 10,
-      orderby: ['displayName desc'],
-      select: ['displayName, id, jobTitle, mail']
-    });
-    setUsers(users?.value);
-  };
+  function _onRenderItemColumn(item: any, _index: number, column: IColumn) {
+    const fieldContent = item[column.fieldName as keyof any] as any;
+
+    switch (column.key) {
+      case 'id':
+        return (
+          <Person userId={item.id} view={ViewType.oneline} personCardInteraction={PersonCardInteraction.hover}></Person>
+        );
+      default:
+        return <span>{fieldContent}</span>;
+    }
+  }
 
   return (
     <>
@@ -63,10 +62,17 @@ export const Users: React.FunctionComponent = () => {
         title={'Users'}
         description={'Use this page to manager the users available on your tenant.'}
       ></PageHeader>
+
       <div>
         {isSignedIn && (
           <>
-            <DetailsList items={users || []} columns={columns} />
+            <List
+              resource={`/users?$select=${columns.map(c => c.fieldName).join(',')}`}
+              columns={columns}
+              scopes={['User.Read.All']}
+              selectionMode={SelectionMode.single}
+              onRenderItemColumn={_onRenderItemColumn}
+            ></List>
           </>
         )}
       </div>
