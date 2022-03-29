@@ -6,12 +6,15 @@ import {
   ShimmeredDetailsList,
   IListProps,
   IColumn,
-  Selection
+  Selection,
+  ThemeProvider
 } from '@fluentui/react';
 import { buildColumns } from './buildColumns';
 import { useGraphToolkit } from '../hooks/useGraphToolkit';
 import { Get, GetProps, MgtTemplateProps } from '@microsoft/mgt-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { themes, useTheme } from '../dashboardTab/global/themes';
+import { useLocalStorage } from 'react-use';
 
 const shimmeredDetailsListProps: IListProps = {
   renderedWindowsAhead: 0,
@@ -50,8 +53,6 @@ export const List: React.FunctionComponent<ListProps> = (props: ListProps) => {
             onRenderItemColumn={props.onRenderItemColumn}
             onSelectionChanged={props.onSelectionChanged}
           ></ListComponent>
-
-          <ListComponent template="loading"></ListComponent>
         </Get>
       )}
     </>
@@ -62,6 +63,8 @@ function ListComponent(props: MgtListTemplateProps) {
   const { value } = props.dataContext;
   const [items] = useState(value);
   const [columns] = useState(props.columns ? props.columns : buildColumns(items));
+  const [currentTheme, setCurrentTheme] = useState(undefined);
+  const [theme] = useLocalStorage<string>('theme');
 
   const selection = new Selection({
     onSelectionChanged: () => {
@@ -71,16 +74,22 @@ function ListComponent(props: MgtListTemplateProps) {
     }
   });
 
+  useEffect(() => {
+    setCurrentTheme(themes[theme!]);
+  }, [theme]);
+
   return (
-    <ShimmeredDetailsList
-      items={items || []}
-      columns={columns}
-      selectionMode={props.selectionMode ? props.selectionMode : SelectionMode.none}
-      selection={selection}
-      ariaLabelForSelectionColumn="Toggle selection"
-      ariaLabelForSelectAllCheckbox="Toggle selection for all items"
-      onRenderItemColumn={props.onRenderItemColumn}
-      enableShimmer={!items}
-    />
+    <ThemeProvider theme={currentTheme}>
+      <ShimmeredDetailsList
+        items={items || []}
+        columns={columns}
+        selectionMode={props.selectionMode ? props.selectionMode : SelectionMode.none}
+        selection={selection}
+        ariaLabelForSelectionColumn="Toggle selection"
+        ariaLabelForSelectAllCheckbox="Toggle selection for all items"
+        onRenderItemColumn={props.onRenderItemColumn}
+        enableShimmer={!items}
+      />
+    </ThemeProvider>
   );
 }

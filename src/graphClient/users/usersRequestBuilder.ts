@@ -1,5 +1,6 @@
-import {UserCollectionResponse} from '../models/microsoft/graph/';
+import {User, UserCollectionResponse} from '../models/microsoft/graph/';
 import {createUserCollectionResponseFromDiscriminatorValue} from '../models/microsoft/graph/createUserCollectionResponseFromDiscriminatorValue';
+import {createUserFromDiscriminatorValue} from '../models/microsoft/graph/createUserFromDiscriminatorValue';
 import {ODataError} from '../models/microsoft/graph/oDataErrors/';
 import {createODataErrorFromDiscriminatorValue} from '../models/microsoft/graph/oDataErrors/createODataErrorFromDiscriminatorValue';
 import {getPathParameters, HttpMethod, Parsable, ParsableFactory, RequestAdapter, RequestInformation, RequestOption, ResponseHandler} from '@microsoft/kiota-abstractions';
@@ -52,6 +53,24 @@ export class UsersRequestBuilder {
         return requestInfo;
     };
     /**
+     * Add new entity to users
+     * @param body 
+     * @param h Request headers
+     * @param o Request options
+     * @returns a RequestInformation
+     */
+    public createPostRequestInformation(body: User | undefined, h?: Record<string, string> | undefined, o?: RequestOption[] | undefined) : RequestInformation {
+        if(!body) throw new Error("body cannot be undefined");
+        const requestInfo = new RequestInformation();
+        requestInfo.urlTemplate = this.urlTemplate;
+        requestInfo.pathParameters = this.pathParameters;
+        requestInfo.httpMethod = HttpMethod.POST;
+        if(h) requestInfo.headers = h;
+        requestInfo.setContentFromParsable(this.requestAdapter, "application/json", body);
+        o && requestInfo.addRequestOptions(...o);
+        return requestInfo;
+    };
+    /**
      * Get entities from users
      * @param h Request headers
      * @param o Request options
@@ -77,5 +96,24 @@ export class UsersRequestBuilder {
             "5XX": createODataErrorFromDiscriminatorValue,
         };
         return this.requestAdapter?.sendAsync<UserCollectionResponse>(requestInfo, createUserCollectionResponseFromDiscriminatorValue, responseHandler, errorMapping) ?? Promise.reject(new Error('http core is null'));
+    };
+    /**
+     * Add new entity to users
+     * @param body 
+     * @param h Request headers
+     * @param o Request options
+     * @param responseHandler Response handler to use in place of the default response handling provided by the core service
+     * @returns a Promise of User
+     */
+    public post(body: User | undefined, h?: Record<string, string> | undefined, o?: RequestOption[] | undefined, responseHandler?: ResponseHandler | undefined) : Promise<User | undefined> {
+        if(!body) throw new Error("body cannot be undefined");
+        const requestInfo = this.createPostRequestInformation(
+            body, h, o
+        );
+        const errorMapping: Record<string, ParsableFactory<Parsable>> = {
+            "4XX": createODataErrorFromDiscriminatorValue,
+            "5XX": createODataErrorFromDiscriminatorValue,
+        };
+        return this.requestAdapter?.sendAsync<User>(requestInfo, createUserFromDiscriminatorValue, responseHandler, errorMapping) ?? Promise.reject(new Error('http core is null'));
     };
 }

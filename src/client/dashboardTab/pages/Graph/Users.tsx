@@ -9,7 +9,7 @@ import { DetailsList, IColumn } from '@fluentui/react';
 
 export const Users: React.FunctionComponent = () => {
   const { isSignedIn } = useGraphToolkit();
-  const { client } = useGraph();
+  const client = useGraph();
   const [users, setUsers] = React.useState<User[] | undefined>(undefined);
 
   useEffect(() => {

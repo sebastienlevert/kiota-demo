@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useState } from 'react';
-import { Providers, ProviderState } from '@microsoft/mgt-element';
+import { useEffect, useState } from 'react';
+import { Providers } from '@microsoft/mgt-element';
 import { FetchRequestAdapter } from '@microsoft/kiota-http-fetchlibrary';
 import { DataverseClient } from '../../dataverseClient/dataverseClient';
 import { SimpleAuthenticationProvider } from '../../kiota/SimpleAuthenticationProvider';

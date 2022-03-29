@@ -1,4 +1,4 @@
-import { DetailsListLayoutMode, IColumn, SelectionMode, ShimmeredDetailsList } from '@fluentui/react';
+import { DetailsList, DetailsListLayoutMode, IColumn, SelectionMode, ShimmeredDetailsList } from '@fluentui/react';
 import * as React from 'react';
 import { useEffect } from 'react';
 import { DataverseClient } from '../../../../dataverseClient/dataverseClient';
@@ -83,12 +83,11 @@ export const Opportunities: React.FunctionComponent = () => {
       <div>
         {isSignedIn && (
           <>
-            <ShimmeredDetailsList
+            <DetailsList
               items={opportunities || []}
               columns={columns}
               layoutMode={DetailsListLayoutMode.justified}
               selectionMode={SelectionMode.none}
-              enableShimmer={!opportunities}
               onRenderItemColumn={_onRenderItemColumn}
               onItemInvoked={_onItemInvoked}
               ariaLabelForSelectionColumn="Toggle selection"
