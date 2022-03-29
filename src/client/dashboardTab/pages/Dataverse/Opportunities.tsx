@@ -5,7 +5,6 @@ import { DataverseClient } from '../../../../dataverseClient/dataverseClient';
 import { Opportunity } from '../../../../dataverseClient/models/microsoft/dynamics/cRM';
 import { useDataverse } from '../../../hooks/useDataverse';
 import { PageHeader } from '../../components/PageHeader/PageHeader';
-import { buildColumns } from '../../../mgt/buildColumns';
 import { useGraphToolkit } from '../../../hooks/useGraphToolkit';
 import { Person, PersonCardInteraction, ViewType } from '@microsoft/mgt-react';
 

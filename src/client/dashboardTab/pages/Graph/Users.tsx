@@ -13,7 +13,7 @@ export const Users: React.FunctionComponent = () => {
   const [users, setUsers] = React.useState<User[] | undefined>(undefined);
 
   useEffect(() => {
-    if (client) {
+    if (isSignedIn && client) {
       fetchUsers(client);
     }
   }, [isSignedIn, client]);
