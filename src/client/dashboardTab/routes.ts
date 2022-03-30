@@ -10,21 +10,6 @@ const routes = {
   component: React.lazy(async () => ({ default: (await import('./pages/Home')).Home })),
   children: [
     {
-      key: 'microsoft-graph',
-      name: 'Microsoft Graph SDK',
-      icon: 'Embed',
-      children: [
-        {
-          key: 'groups',
-          name: 'Groups',
-          path: '/groups',
-          icon: 'Mail',
-          exact: true,
-          component: React.lazy(async () => ({ default: (await import('./pages/Graph/Groups')).Groups }))
-        }
-      ]
-    },
-    {
       key: 'kiota-graph',
       name: 'Graph with Kiota',
       icon: 'Embed',
@@ -58,6 +43,21 @@ const routes = {
       ]
     },
     {
+      key: 'microsoft-graph',
+      name: 'Microsoft Graph SDK',
+      icon: 'Embed',
+      children: [
+        {
+          key: 'groups',
+          name: 'Groups',
+          path: '/groups',
+          icon: 'Mail',
+          exact: true,
+          component: React.lazy(async () => ({ default: (await import('./pages/Graph/Groups')).Groups }))
+        }
+      ]
+    },
+    {
       key: 'mgt',
       name: 'Microsoft Graph Toolkit',
       icon: 'Embed',
@@ -69,14 +69,6 @@ const routes = {
           icon: 'People',
           exact: true,
           component: React.lazy(async () => ({ default: (await import('./pages/Toolkit/Users')).Users }))
-        },
-        {
-          key: 'teams',
-          name: 'Teams',
-          path: '/teams',
-          icon: 'TeamsLogo',
-          exact: true,
-          component: React.lazy(async () => ({ default: (await import('./pages/Toolkit/Teams')).Teams }))
         }
       ]
     }
