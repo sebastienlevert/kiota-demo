@@ -8,7 +8,7 @@ import { singletonHook } from 'react-singleton-hook';
 
 const initGraphClient: GraphClient | undefined = undefined;
 
-const useDataverseImpl = (): GraphClient | undefined => {
+const useGraphImpl = (): GraphClient | undefined => {
   const [graphClient, setGraphClient] = useState<GraphClient | undefined>();
 
   useEffect(() => {
@@ -22,4 +22,4 @@ const useDataverseImpl = (): GraphClient | undefined => {
   return graphClient;
 };
 
-export const useGraph = singletonHook(initGraphClient, useDataverseImpl);
+export const useGraph = singletonHook(initGraphClient, useGraphImpl);
