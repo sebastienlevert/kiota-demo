@@ -1,12 +1,11 @@
 import * as React from 'react';
 import { PageHeader } from '../../components/PageHeader/PageHeader';
 import { useGraphToolkit } from '../../../hooks/useGraphToolkit';
-import { List } from '../../../mgt/MgtList';
 import { Group } from '@microsoft/msgraph-sdk-javascript/lib/models/microsoft/graph/group';
 import { useEffect } from 'react';
 import { GraphServiceClient, SimpleAuthenticationProvider } from '@microsoft/msgraph-sdk-javascript';
 import { Providers } from '@microsoft/mgt-element';
-import { getDefaultMiddlewareChain, HttpClient } from '@microsoft/microsoft-graph-client';
+import { getDefaultMiddlewareChain } from '@microsoft/microsoft-graph-client';
 import { OdataQueryHandler } from '../../../../kiota/oDataQueryHandler';
 import { DetailsList, IColumn, Toggle } from '@fluentui/react';
 import { GroupCollectionResponse } from '@microsoft/msgraph-sdk-javascript/lib/models/microsoft/graph';

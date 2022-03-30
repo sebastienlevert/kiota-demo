@@ -2,12 +2,7 @@ import * as React from 'react';
 import { PageHeader } from '../../components/PageHeader/PageHeader';
 import { useGraphToolkit } from '../../../hooks/useGraphToolkit';
 import { List } from '../../../mgt/MgtList';
-import { useEffect } from 'react';
-import { GraphClient } from '../../../../graphClient/graphClient';
-import { DetailsListLayoutMode, IColumn, SelectionMode, ShimmeredDetailsList } from '@fluentui/react';
-import { buildColumns } from '../../../mgt/buildColumns';
-import { User } from '../../../../graphClient/models/microsoft/graph/user';
-import { useGraph } from '../../../hooks/useGraph';
+import { IColumn, SelectionMode } from '@fluentui/react';
 import { Person, PersonCardInteraction, ViewType } from '@microsoft/mgt-react';
 
 export const Users: React.FunctionComponent = () => {
