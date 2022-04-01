@@ -1,8 +1,26 @@
 # Kiota Demo - Microsoft Teams App
 
-Generate a Microsoft Teams application.
+Some instructions to make this work in your environment! It's still very early and requires "tweaks" to the project.
 
-TODO: Add your documentation here
+* `yarn`
+* Copy the `.env.sample` file to a new `.env` file and fill the necessary information ([Use the following guide on how to get your app as an app available for SSO](https://docs.microsoft.com/en-us/microsoftteams/platform/tabs/how-to/authentication/auth-aad-sso?msclkid=7dacfce0b1c411ec9a10c6d6f73b1d32&tabs=dotnet))
+
+```
+# Same as your CLIENT_ID
+TAB_APP_ID=
+# Export an API from your app in the format api://******.ngrok.io/CLIENT_ID
+TAB_APP_URI=
+# Azure AD App ID
+CLIENT_ID=
+# Your Dataverse Url (https://******.crm.dynamics.com)
+DATAVERSE_URL=
+# Your Dataverse API Url (https://******.crm.dynamics.com/api/data/v9.1)
+DATAVERSE_API_URL=
+```
+* Locate the following file `node_modules/@microsoft/kiota-serialization-json/dist/es/jsonParseNodeFactory.js` and comment the first line. 
+* gulp ngrok-serve --debug
+
+The current implementation of the Graph SDK is heavy and takes a lot of time to build (we're working on it), so we advise to debug builds as production builds can take a very (very!) long time!
 
 ## Getting started with Microsoft Teams Apps development
 
